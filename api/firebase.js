@@ -1,31 +1,26 @@
-// ============================================================
-// JASON INVEST — FIREBASE BACKEND PUBLIC — VERSION CORRIGEE
-// Remplis avec tes clés Firebase Console > Project Settings
-// ============================================================
-
-export const FIREBASE_CONFIG = {
-  apiKey: "AIzaSyXXXXXXXXXXXXXXXXXXXXXXX",
-  authDomain: "ton-projet.firebaseapp.com",
-  databaseURL: "https://ton-projet-default-rtdb.firebaseio.com",
-  projectId: "ton-projet",
-  storageBucket: "ton-projet.appspot.com",
-  messagingSenderId: "123456789",
-  appId: "1:123456789:web:xxxxxxxx"
-};
-
-// Pour api/index.js sur Vercel (Service Account)
-export const FIREBASE_SERVICE_ACCOUNT = {
-  projectId: process.env.FIREBASE_PROJECT_ID || "ton-projet",
-  clientEmail: process.env.FIREBASE_CLIENT_EMAIL || "firebase-adminsdk-xxxx@ton-projet.iam.gserviceaccount.com",
-  privateKey: (process.env.FIREBASE_PRIVATE_KEY || "").replace(/\\n/g, '\n')
-};
-
-export function isFirebaseConfigured() {
-  return Boolean(
-    FIREBASE_SERVICE_ACCOUNT.projectId &&
-    FIREBASE_SERVICE_ACCOUNT.clientEmail &&
-    FIREBASE_SERVICE_ACCOUNT.privateKey
-  );
+// api/firebase.js - version safe qui ne crash pas
+let db = null;
+try {
+  const admin = require('firebase-admin');
+  if (!admin.apps.length) {
+    if (process.env.FIREBASE_PRIVATE_KEY) {
+      admin.initializeApp({
+        credential: admin.credential.cert({
+          projectId: process.env.FIREBASE_PROJECT_ID,
+          clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+          privateKey: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n')
+        })
+      });
+      db = admin.firestore();
+      console.log('Firebase OK');
+    } else {
+      console.log('Firebase env manquantes - mode mémoire');
+    }
+  } else {
+    db = admin.firestore();
+  }
+} catch(e){
+  console.log('Firebase désactivé:', e.message);
+  db = null;
 }
-
-export const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "10092007";
+module.exports = db;
