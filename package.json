@@ -1,0 +1,12 @@
+{
+  "name": "jason-invest",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node api/index.js"
+  },
+  "dependencies": {
+    "firebase-admin": "^13.5.0"
+  }
+}

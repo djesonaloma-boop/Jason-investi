@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JASON INVEST — Administration FC</title>
+<style>
+:root{--bg:#050b16;--bg2:#081221;--surface:#0d1829;--surface2:#111f33;--border:#203149;--gold:#d8b45a;--gold2:#f1d98b;--text:#f5f7fb;--muted:#91a0b5;--green:#37d39b;--red:#ff6675;--blue:#4da3ff;--orange:#ffb454;--shadow:0 20px 50px rgba(0,0,0,.30);--radius:18px;}
+*{box-sizing:border-box;margin:0;padding:0;}html{scroll-behavior:smooth;}
+body{font-family:Arial,Helvetica,sans-serif;background:radial-gradient(circle at 20% 10%,rgba(216,180,90,.05),transparent 25%),radial-gradient(circle at 90% 80%,rgba(77,163,255,.04),transparent 25%),var(--bg);color:var(--text);min-height:100vh;}
+button,input,select,textarea{font:inherit;}button{cursor:pointer;}.hidden{display:none!important;}
+.login-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;background:radial-gradient(circle at top,#12233b 0,#050b16 45%,#03070e 100%);}
+.login-box{width:100%;max-width:430px;background:rgba(13,24,41,.96);border:1px solid var(--border);border-radius:24px;padding:32px;box-shadow:var(--shadow);}
+.login-logo{width:74px;height:74px;margin:0 auto 18px;border-radius:20px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,var(--gold2),var(--gold));color:#111;font-size:28px;font-weight:900;}
+.login-title{text-align:center;font-size:25px;margin-bottom:7px;}.login-subtitle{text-align:center;color:var(--muted);font-size:14px;margin-bottom:28px;}
+.field{margin-bottom:17px;}.field label{display:block;color:#dbe3ef;font-size:13px;margin-bottom:8px;}
+.field input,.field select,.field textarea{width:100%;border:1px solid var(--border);outline:none;background:#091424;color:var(--text);border-radius:12px;padding:13px 14px;}
+.field textarea{min-height:110px;resize:vertical;}
+.login-button{width:100%;border:0;border-radius:12px;padding:14px;background:linear-gradient(135deg,var(--gold2),var(--gold));color:#111;font-weight:800;margin-top:5px;}
+.login-error{display:none;margin-top:15px;padding:11px 13px;border-radius:10px;background:rgba(255,102,117,.10);border:1px solid rgba(255,102,117,.35);color:#ff9aa5;font-size:13px;}
+.app{min-height:100vh;display:flex;}.sidebar{width:270px;position:fixed;top:0;left:0;bottom:0;background:#07101d;border-right:1px solid var(--border);padding:20px 14px;overflow-y:auto;z-index:1000;}
+.brand{display:flex;align-items:center;gap:12px;padding:6px 8px 22px;border-bottom:1px solid var(--border);margin-bottom:15px;}
+.brand-logo{width:45px;height:45px;border-radius:13px;background:linear-gradient(135deg,var(--gold2),var(--gold));display:flex;align-items:center;justify-content:center;color:#111;font-weight:900;}
+.brand-title{font-weight:800;font-size:15px;}.brand-subtitle{color:var(--muted);font-size:11px;margin-top:3px;}
+.nav-title{color:#66768e;font-size:10px;text-transform:uppercase;letter-spacing:1.4px;margin:18px 10px 8px;}
+.nav-btn{width:100%;display:flex;align-items:center;gap:11px;border:1px solid transparent;background:transparent;color:#aebbd0;border-radius:11px;padding:11px 12px;text-align:left;margin-bottom:4px;}
+.nav-btn.active{background:#101d30;color:var(--gold2);border-color:#243650;}
+.nav-icon{width:22px;text-align:center;}.sidebar-bottom{margin-top:20px;padding-top:15px;border-top:1px solid var(--border);}
+.main{margin-left:270px;width:calc(100% - 270px);min-height:100vh;}
+.topbar{height:72px;display:flex;align-items:center;justify-content:space-between;padding:0 28px;background:rgba(5,11,22,.90);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:900;}
+.topbar-title{font-size:18px;font-weight:800;}.admin-status{display:flex;align-items:center;gap:9px;color:var(--muted);font-size:12px;}.status-dot{width:8px;height:8px;background:var(--green);border-radius:50%;}
+.menu-mobile{display:none;border:1px solid var(--border);background:#0c1828;color:white;border-radius:10px;padding:8px 10px;}
+.quick-menu-wrap{position:relative;}
+.quick-btn{width:42px;height:42px;border:1px solid var(--border);background:#0c1828;color:white;border-radius:10px;font-size:20px;}
+.quick-dropdown{display:none;position:absolute;right:0;top:50px;background:#0d1829;border:1px solid var(--border);border-radius:14px;padding:8px;min-width:210px;z-index:1001;}
+.quick-dropdown.show{display:block;}
+.content{padding:28px;max-width:1600px;margin:auto;}
+.admin-section{display:none;}.admin-section.active{display:block;}
+.page-head{margin-bottom:23px;}.page-head h1{font-size:26px;margin-bottom:7px;}.page-head p{color:var(--muted);font-size:14px;}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:15px;margin-bottom:22px;}
+.stat{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px;}
+.stat-label{color:var(--muted);font-size:12px;margin-bottom:10px;}.stat-value{font-size:25px;font-weight:900;}.stat-icon{font-size:22px;margin-bottom:10px;}
+.panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px;margin-bottom:20px;}
+.panel-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:17px;}
+.panel-title{font-size:17px;font-weight:800;}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:20px;}.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:15px;}
+.btn{border:1px solid var(--border);background:#0c1828;color:#e9eef7;border-radius:10px;padding:10px 13px;}.btn-gold{border-color:var(--gold);background:linear-gradient(135deg,var(--gold2),var(--gold));color:#111;font-weight:800;}
+.btn-green{border-color:rgba(55,211,155,.35);background:rgba(55,211,155,.10);color:#6ee6b6;}.btn-red{border-color:rgba(255,102,117,.35);background:rgba(255,102,117,.10);color:#ff8995;}.btn-blue{border-color:rgba(77,163,255,.35);background:rgba(77,163,255,.10);color:#80bdff;}
+.table-wrap{overflow-x:auto;}table{width:100%;border-collapse:collapse;min-width:700px;}th,td{padding:13px 12px;border-bottom:1px solid #1a2a40;text-align:left;font-size:13px;}th{color:#7e8ea5;font-size:11px;text-transform:uppercase;}td{color:#dce4ef;}
+.badge{display:inline-flex;padding:5px 8px;border-radius:999px;font-size:10px;font-weight:800;}
+.badge-green{color:#69e4b1;background:rgba(55,211,155,.10);}.badge-red{color:#ff8995;background:rgba(255,102,117,.10);}.badge-orange{color:#ffc674;background:rgba(255,180,84,.10);}.badge-blue{color:#82bdff;background:rgba(77,163,255,.10);}
+.plan-card{background:#091525;border:1px solid var(--border);border-radius:15px;padding:18px;}.plan-fields{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.search-row{display:flex;gap:10px;margin-bottom:17px;}.search-row input{flex:1;border:1px solid var(--border);background:#091424;color:white;border-radius:10px;padding:11px 13px;}
+.task-card{background:#091525;border:1px solid var(--border);border-radius:15px;padding:18px;margin-bottom:12px;}
+.empty{padding:35px 15px;text-align:center;color:var(--muted);}
+.toast{position:fixed;right:20px;bottom:20px;z-index:5000;max-width:360px;background:#101d30;border:1px solid var(--border);border-left:4px solid var(--gold);border-radius:12px;padding:13px 15px;transform:translateY(120px);opacity:0;transition:.25s;}
+.toast.show{transform:translateY(0);opacity:1;}
+@media(max-width:800px){.sidebar{transform:translateX(-100%);position:fixed;}.sidebar.open{transform:translateX(0);}.main{margin-left:0;width:100%;}.menu-mobile{display:block;}.content{padding:18px 14px;}.grid-2,.grid-3{grid-template-columns:1fr;}.stats{grid-template-columns:1fr 1fr;}}
+</style>
+</head>
+<body>
+<div id="adminLogin" class="login-screen">
+  <div class="login-box">
+    <div class="login-logo">JI</div>
+    <h1 class="login-title">JASON INVEST FC</h1>
+    <p class="login-subtitle">Admin PUBLIC - Dépôt 20k min / Retrait 10k min</p>
+    <form id="loginForm">
+      <div class="field"><label>Identifiant</label><input id="adminIdentifier" type="text" placeholder="admin" required></div>
+      <div class="field"><label>Mot de passe</label><input id="adminPassword" type="password" placeholder="••••••••" required></div>
+      <button class="login-button" type="submit">🔐 Se connecter PUBLIC</button>
+      <div id="loginError" class="login-error"></div>
+    </form>
+  </div>
+</div>
+<div id="adminApp" class="app hidden">
+  <aside id="sidebar" class="sidebar">
+    <div class="brand"><div class="brand-logo">JI</div><div><div class="brand-title">JASON INVEST FC</div><div class="brand-subtitle">Administration PUBLIC</div></div></div>
+    <div class="nav-title">Principal</div>
+    <button class="nav-btn active" data-section="dashboard"><span class="nav-icon">📊</span> Dashboard FC</button>
+    <button class="nav-btn" data-section="clients"><span class="nav-icon">👥</span> Clients FC</button>
+    <button class="nav-btn" data-section="deposits"><span class="nav-icon">💰</span> Dépôts 20k min <span id="badgeDep" style="margin-left:auto;background:#ffb454;color:#111;padding:2px 6px;border-radius:20px;font-size:10px;display:none;">0</span></button>
+    <button class="nav-btn" data-section="withdrawals"><span class="nav-icon">💸</span> Retraits 10k min <span id="badgeWit" style="margin-left:auto;background:#ff6675;color:#fff;padding:2px 6px;border-radius:20px;font-size:10px;display:none;">0</span></button>
+    <button class="nav-btn" data-section="payments"><span class="nav-icon">📱</span> Paiements FC</button>
+    <div class="nav-title">Plateforme FC</div>
+    <button class="nav-btn" data-section="investments"><span class="nav-icon">📈</span> Investissements FC</button>
+    <button class="nav-btn" data-section="tasks"><span class="nav-icon">📝</span> Tâches IA FC <span id="badgeTask" style="margin-left:auto;background:#4da3ff;color:#fff;padding:2px 6px;border-radius:20px;font-size:10px;">0</span></button>
+    <button class="nav-btn" data-section="activities"><span class="nav-icon">📢</span> Activités</button>
+    <button class="nav-btn" data-section="fidelity"><span class="nav-icon">⭐</span> Fidélité & VIP FC</button>
+    <button class="nav-btn" data-section="referral"><span class="nav-icon">👥</span> Parrainage FC</button>
+    <button class="nav-btn" data-section="notifications"><span class="nav-icon">🔔</span> Notifications FC</button>
+    <div class="nav-title">Assistance</div>
+    <button class="nav-btn" data-section="support"><span class="nav-icon">🎧</span> Support FC</button>
+    <button class="nav-btn" data-section="settings"><span class="nav-icon">⚙️</span> Paramètres</button>
+    <div class="sidebar-bottom"><button id="logoutButton" class="nav-btn"><span class="nav-icon">🚪</span> Déconnexion</button></div>
+  </aside>
+  <main class="main">
+    <header class="topbar">
+      <div style="display:flex;align-items:center;gap:12px;"><button id="mobileMenu" class="menu-mobile">☰</button><div id="topbarTitle" class="topbar-title">Dashboard FC PUBLIC</div></div>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <div class="quick-menu-wrap"><button id="quickMenuBtn" class="quick-btn">⋮</button><div id="quickMenu" class="quick-dropdown"><button class="nav-btn" onclick="openSection('tasks');toggleQuick()"><span class="nav-icon">📝</span> Tâches IA FC</button><button class="nav-btn" onclick="openSection('deposits');toggleQuick()"><span class="nav-icon">💰</span> Dépôts 20k FC</button><button class="nav-btn" onclick="openSection('withdrawals');toggleQuick()"><span class="nav-icon">💸</span> Retraits 10k FC</button><button class="nav-btn" onclick="openSection('clients');toggleQuick()"><span class="nav-icon">👥</span> Clients</button></div></div>
+        <div class="admin-status"><span class="status-dot"></span><span>Admin PUBLIC</span></div>
+      </div>
+    </header>
+    <div class="content">
+      <section id="section-dashboard" class="admin-section active"><div class="page-head"><h1>Dashboard FC PUBLIC</h1><p>Dépôt min 20 000 FC - Retrait min 10 000 FC - Admin modif = Client voit direct</p></div><div class="stats"><div class="stat"><div class="stat-icon">👥</div><div class="stat-label">Clients FC</div><div id="statClients" class="stat-value">0</div></div><div class="stat"><div class="stat-icon">💰</div><div class="stat-label">Dépôts validés FC</div><div id="statDeposits" class="stat-value">0 FC</div></div><div class="stat"><div class="stat-icon">💸</div><div class="stat-label">Retraits payés FC</div><div id="statWithdrawals" class="stat-value">0 FC</div></div><div class="stat"><div class="stat-icon">📈</div><div class="stat-label">En attente FC</div><div id="statPending" class="stat-value">0</div></div></div><div class="grid-2"><div class="panel"><div class="panel-head"><div class="panel-title">Derniers clients FC PUBLIC</div><button class="btn" onclick="loadDashboard()">Actualiser PUBLIC</button></div><div id="recentTransactions"></div></div><div class="panel"><div class="panel-title">État PUBLIC</div><div id="platformStatus" style="margin-top:12px;"></div><br><button class="btn btn-gold" onclick="loadDashboard()">🔄 Actualiser PUBLIC</button></div></div></section>
+      <section id="section-clients" class="admin-section"><div class="page-head"><h1>Clients FC PUBLIC</h1></div><div class="panel"><div class="search-row"><input id="clientSearch" placeholder="Rechercher en FC PUBLIC..."><button class="btn" onclick="loadClients()">🔄 PUBLIC</button></div><div class="table-wrap"><table><thead><tr><th>Client FC</th><th>Tél / MDP FC</th><th>Solde FC</th><th>VIP FC</th><th>Action PUBLIC FC</th></tr></thead><tbody id="clientsTable"></tbody></table></div></div></section>
+      <section id="section-deposits" class="admin-section"><div class="page-head"><h1>Dépôts FC PUBLIC - 20 000 FC minimum</h1><p>Valide PUBLIC pour créditer automatiquement en FC</p></div><div class="panel"><div class="table-wrap"><table><thead><tr><th>Date</th><th>Client</th><th>Méthode FC</th><th>Ref FC</th><th>Montant FC</th><th>Statut</th><th>Action PUBLIC FC</th></tr></thead><tbody id="depositsTable"></tbody></table></div></div></section>
+      <section id="section-withdrawals" class="admin-section"><div class="page-head"><h1>Retraits FC PUBLIC - 10 000 FC minimum</h1><p>Valide PUBLIC pour débiter en FC</p></div><div class="panel"><div class="table-wrap"><table><thead><tr><th>Date</th><th>Client</th><th>Méthode FC</th><th>Tél FC</th><th>Montant FC</th><th>Statut</th><th>Action PUBLIC FC</th></tr></thead><tbody id="withdrawalsTable"></tbody></table></div></div></section>
+      <section id="section-payments" class="admin-section"><div class="page-head"><h1>Paiements FC</h1></div><div class="grid-2"><div class="panel"><div class="field"><label>Nom FC</label><input id="paymentName" placeholder="Orange Money FC"></div><div class="field"><label>Numéro FC</label><input id="paymentNumber" placeholder="+243..."></div><div class="field"><label>Type FC</label><select id="paymentType"><option value="deposit">Dépôt FC 20k min</option><option value="withdrawal">Retrait FC 10k min</option><option value="both">Les deux FC</option></select></div><button class="btn btn-gold" onclick="addPaymentMethod()">➕ Ajouter FC PUBLIC</button></div><div class="panel"><div id="paymentMethodsList"></div></div></div></section>
+      <section id="section-investments" class="admin-section"><div class="page-head"><h1>Investissements FC PUBLIC</h1></div><div class="panel"><div id="plansContainer"></div><br><div class="grid-2"><button class="btn btn-gold" onclick="addPlan()">➕ Ajouter plan PUBLIC</button><button class="btn btn-gold" onclick="saveInvestmentPlans()">💾 Enregistrer PUBLIC</button></div></div></section>
+      <section id="section-tasks" class="admin-section"><div class="page-head"><h1>📝 Tâches IA FC PUBLIC auto</h1></div><div class="grid-2"><div class="panel"><div class="field"><label>Nom tâche FC</label><input id="taskTitle" placeholder="Ex: Tâche VIP du jour FC PUBLIC"></div><div class="field"><label>Description FC</label><textarea id="taskDescription" placeholder="Explique la tâche en FC..."></textarea></div><div class="grid-2"><div class="field"><label>Durée min</label><input id="taskDuration" type="number" value="5"></div><div class="field"><label>Gain FC</label><input id="taskReward" type="number" value="1500"></div></div><div class="field"><label>Invest minimum FC</label><input id="taskMinInvestment" type="number" value="20000"></div><div class="field"><label>Statut FC</label><select id="taskStatus"><option value="active">Active FC</option><option value="inactive">Désactivée FC</option></select></div><button class="btn btn-gold" onclick="createTask()">➕ Créer tâche PUBLIC</button></div><div class="panel"><div class="panel-head"><div class="panel-title">Tâches existantes PUBLIC</div><button class="btn" onclick="loadTasks()">🔄 PUBLIC</button></div><div id="tasksList"></div></div></div></section>
+      <section id="section-activities" class="admin-section"><div class="page-head"><h1>Activités FC PUBLIC</h1></div><div class="grid-2"><div class="panel"><div class="field"><label>Titre FC</label><input id="activityTitle"></div><div class="field"><label>Catégorie FC</label><select id="activityCategory"><option value="actualite">Actualité FC</option><option value="evenement">Événement FC</option><option value="annonce">Annonce FC</option></select></div><div class="field"><label>Description FC</label><textarea id="activityDescription"></textarea></div><button class="btn btn-gold" onclick="publishActivity()">📢 Publier PUBLIC</button></div><div class="panel"><div id="activitiesList"></div></div></div></section>
+      <section id="section-fidelity" class="admin-section"><div class="page-head"><h1>Fidélité FC PUBLIC</h1></div><div class="panel"><p>10 pts pour 1000 FC déposé validé - VIP auto en FC PUBLIC</p><div id="fidelityList"></div></div></section>
+      <section id="section-referral" class="admin-section"><div class="page-head"><h1>Parrainage FC PUBLIC</h1></div><div class="panel"><div class="grid-2"><div class="field"><label>Bonus FC</label><input id="referralBonus" type="number" value="500"></div><div class="field"><label>Préfixe FC</label><input id="referralPrefix" value="JAS-"></div></div><button class="btn btn-gold" onclick="saveReferralSettings()">💾 PUBLIC</button></div></section>
+      <section id="section-notifications" class="admin-section"><div class="page-head"><h1>Notifications FC PUBLIC</h1></div><div class="panel"><div class="field"><label>Titre FC</label><input id="notificationTitle"></div><div class="field"><label>Message FC</label><textarea id="notificationMessage"></textarea></div><button class="btn btn-gold" onclick="sendNotification()">🔔 Envoyer PUBLIC</button></div><div class="panel"><div id="notificationsList"></div></div></section>
+      <section id="section-support" class="admin-section"><div class="page-head"><h1>Support FC PUBLIC</h1></div><div class="panel"><div id="supportList" class="empty">Aucune demande FC PUBLIC</div></div></section>
+      <section id="section-settings" class="admin-section"><div class="page-head"><h1>Paramètres FC PUBLIC</h1></div><div class="panel"><div class="field"><label>Nom plateforme FC</label><input id="settingName" value="JASON INVEST FC PUBLIC"></div><div class="field"><label>Dépôt min FC</label><input value="20000" disabled></div><div class="field"><label>Retrait min FC</label><input value="10000" disabled></div><button class="btn btn-gold" onclick="saveSettings()">💾 PUBLIC</button></div></section>
+    </div>
+  </main>
+</div>
+<div id="toast" class="toast"></div>
+<script>
+function $(id){return document.getElementById(id);}
+function money(v){return Number(v||0).toLocaleString('fr-FR')+" FC";}
+function dateFormat(v){try{return new Date(v).toLocaleString('fr-FR');}catch{return v;}}
+function toast(m){const e=$("toast");e.textContent=m;e.className="toast show";clearTimeout(window.__t);window.__t=setTimeout(()=>e.className="toast",3500);}
+const API_BASE="/api";
+function getToken(){return localStorage.getItem('jason_admin_token')||localStorage.getItem('jason_token')||"";}
+async function fetchAdmin(path){
+  try{
+    const r=await fetch(`${API_BASE}${path}`,{headers:{Authorization:`Bearer ${getToken()}`}});
+    if(!r.ok) throw new Error("api");
+    return await r.json();
+  }catch{return null;}
+}
+
+$("loginForm").addEventListener("submit",async(e)=>{
+  e.preventDefault();
+  if($("adminIdentifier").value.trim()==="admin" && $("adminPassword").value==="10092007"){
+    try{
+      const r=await fetch(`${API_BASE}/admin/login`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({identifier:$("adminIdentifier").value,password:$("adminPassword").value})});
+      const j=await r.json(); if(j.token) localStorage.setItem('jason_admin_token',j.token);
+    }catch{}
+    localStorage.setItem('jason_admin','1'); $("adminLogin").classList.add("hidden"); $("adminApp").classList.remove("hidden"); loadDashboard(); toast("Connecté ADMIN PUBLIC FC");
+  }else{ $("loginError").style.display="block"; $("loginError").textContent="Identifiant ou mot de passe incorrect"; }
+});
+function toggleQuick(){document.getElementById('quickMenu').classList.toggle('show');}
+window.toggleQuick=toggleQuick;
+$("quickMenuBtn").addEventListener("click",toggleQuick);
+window.openSection=function(n){
+  document.querySelectorAll(".admin-section").forEach(s=>s.classList.remove("active"));
+  document.querySelectorAll(".nav-btn[data-section]").forEach(b=>b.classList.remove("active"));
+  const sec=document.getElementById("section-"+n); if(sec) sec.classList.add("active");
+  const btn=document.querySelector(`.nav-btn[data-section="${n}"]`); if(btn) btn.classList.add("active");
+  $("topbarTitle").textContent=document.querySelector(`.nav-btn[data-section="${n}"]`)?.textContent.trim()||n;
+  $("sidebar").classList.remove("open");
+  if(n==="dashboard") loadDashboard(); if(n==="clients") loadClients(); if(n==="deposits") loadDeposits(); if(n==="withdrawals") loadWithdrawals(); if(n==="payments") loadPaymentMethods(); if(n==="investments") loadInvestmentPlans(); if(n==="tasks") loadTasks(); if(n==="activities") loadActivities(); if(n==="notifications") loadNotifications();
+}
+document.querySelectorAll(".nav-btn[data-section]").forEach(b=>b.addEventListener("click",()=>openSection(b.dataset.section)));
+$("mobileMenu").addEventListener("click",()=>$("sidebar").classList.toggle("open"));
+$("logoutButton").addEventListener("click",()=>{localStorage.removeItem('jason_admin');localStorage.removeItem('jason_admin_token');location.reload();});
+
+async function loadDashboard(){
+  const api=await fetchAdmin("/admin/stats");
+  if(api){
+    $("statClients").textContent=api.clients||0;
+    $("statDeposits").textContent=money(api.depositsValides||0);
+    $("statWithdrawals").textContent=money(api.withdrawalsPayes||0);
+    $("statPending").textContent=api.pending||0;
+    $("badgeDep").style.display=(api.depositsPending||0)>0?"inline-block":"none"; $("badgeDep").textContent=api.depositsPending||0;
+    $("badgeWit").style.display=(api.withdrawalsPending||0)>0?"inline-block":"none"; $("badgeWit").textContent=api.withdrawalsPending||0;
+    $("recentTransactions").innerHTML=api.recents?.map(u=>`<div style="padding:10px 0;border-bottom:1px solid #1a2a40;display:flex;justify-content:space-between;"><strong>${u.name}</strong><span>${money(u.solde||u.balance||0)}</span></div>`).join("")||'<div class="empty">Aucun client FC PUBLIC</div>';
+  }else{
+    const users=JSON.parse(localStorage.getItem('jason_users')||'[]'); const dep=JSON.parse(localStorage.getItem('jason_deposits')||'[]'); const wit=JSON.parse(localStorage.getItem('jason_withdrawals')||'[]');
+    $("statClients").textContent=users.length; let depV=0; dep.filter(d=>d.status==="approved").forEach(d=>depV+=Number(d.amount||0)); let witV=0; wit.filter(d=>d.status==="approved").forEach(d=>witV+=Number(d.amount||0));
+    $("statDeposits").textContent=money(depV); $("statWithdrawals").textContent=money(witV); $("statPending").textContent=dep.filter(d=>d.status==="pending").length+wit.filter(d=>d.status==="pending").length;
+  }
+  $("platformStatus").innerHTML=`<div style="padding:12px;border-radius:12px;background:rgba(55,211,155,.08);border:1px solid rgba(55,211,155,.2);color:#37d39b;font-weight:800;">● PUBLIC opérationnel - Admin modif = Client voit direct sur Vercel</div>`;
+}
+window.loadDashboard=loadDashboard;
+
+async function loadClients(){
+  const data=await fetchAdmin("/admin/users"); let users=data?.users||JSON.parse(localStorage.getItem('jason_users')||'[]');
+  const q=($("clientSearch").value||"").toLowerCase(); if(q) users=users.filter(u=> (u.name+" "+u.email+" "+u.phone).toLowerCase().includes(q));
+  $("clientsTable").innerHTML=users.map(u=>`<tr><td><strong>${u.name}</strong><div style="font-size:11px;color:#91a0b5;">${u.email}</div></td><td>${u.phone}<div style="font-size:11px;color:#ffb454;">🔑 ${u.password||u.pass||"—"}</div></td><td>${money(u.solde||u.balance||0)}</td><td>${u.vip||"Aucun FC"}</td><td style="display:flex;gap:6px;flex-wrap:wrap;"><button class="btn btn-green" onclick="addSolde('${u.id}')">+ Solde PUBLIC</button><button class="btn btn-blue" onclick="resetPassword('${u.id}')">🔑 MDP PUBLIC</button></td></tr>`).join("")||'<tr><td colspan="5" class="empty">Aucun client FC PUBLIC</td></tr>';
+}
+$("clientSearch")?.addEventListener("input",loadClients);
+window.addSolde=async(id)=>{
+  const m=prompt("Montant FC PUBLIC à ajouter:"); if(!m) return;
+  try{
+    const r=await fetch(`${API_BASE}/admin/add-solde`,{method:"POST",headers:{"Content-Type":"application/json",Authorization:`Bearer ${getToken()}`},body:JSON.stringify({userId:id,amount:Number(m)})});
+    const j=await r.json(); if(!r.ok) throw new Error(j.message);
+    toast("✅ Solde PUBLIC ajouté: "+money(m)); loadClients(); loadDashboard();
+  }catch(e){toast("Erreur: "+e.message);}
+}
+window.resetPassword=async(id)=>{
+  const nouveau=prompt("Nouveau MDP PUBLIC:"); if(!nouveau) return;
+  try{
+    const r=await fetch(`${API_BASE}/admin/reset-password`,{method:"POST",headers:{"Content-Type":"application/json",Authorization:`Bearer ${getToken()}`},body:JSON.stringify({userId:id,password:nouveau})});
+    if(!r.ok) throw new Error("api"); toast("✅ MDP PUBLIC changé: "+nouveau);
+  }catch{toast("Erreur MDP PUBLIC");}
+}
+async function loadDeposits(){
+  const data=await fetchAdmin("/admin/deposits"); const list=data?.deposits||JSON.parse(localStorage.getItem('jason_deposits')||'[]');
+  const tbody=$("depositsTable"); if(!list.length){tbody.innerHTML='<tr><td colspan="7" class="empty">Aucune demande PUBLIC FC</td></tr>';return;}
+  tbody.innerHTML=list.slice().reverse().map(d=>`<tr><td>${dateFormat(d.date||d.createdAt)}</td><td>${d.name||d.email}</td><td>${d.method}</td><td>${d.reference||'—'}</td><td><strong>${money(d.amount)}</strong></td><td><span class="badge ${d.status==="approved"?"badge-green":d.status==="rejected"?"badge-red":"badge-orange"}">${d.status} PUBLIC</span></td><td>${d.status==="pending"?`<button class="btn btn-green" onclick="approveDeposit('${d.id||d._id}')">✓ Valider PUBLIC</button> <button class="btn btn-red" onclick="rejectDeposit('${d.id||d._id}')">✕</button>`:`<button class="btn" onclick="approveDeposit('${d.id||d._id}')">✓ Re-valider PUBLIC</button>`}</td></tr>`).join("");
+}
+window.approveDeposit=async(id)=>{
+  if(!confirm("Valider PUBLIC et créditer FC ?")) return;
+  const r=await fetch(`${API_BASE}/admin/approve-deposit`,{method:"POST",headers:{"Content-Type":"application/json",Authorization:`Bearer ${getToken()}`},body:JSON.stringify({id})});
+  if(r.ok){toast("✅ Dépôt PUBLIC validé FC"); loadDeposits(); loadDashboard();} else toast("Erreur PUBLIC");
+}
+window.rejectDeposit=async(id)=>{
+  if(!confirm("Refuser PUBLIC ?")) return;
+  await fetch(`${API_BASE}/admin/reject-deposit`,{method:"POST",headers:{"Content-Type":"application/json",Authorization:`Bearer ${getToken()}`},body:JSON.stringify({id})});
+  loadDeposits(); loadDashboard();
+}
+async function loadWithdrawals(){
+  const data=await fetchAdmin("/admin/withdrawals"); const list=data?.withdrawals||JSON.parse(localStorage.getItem('jason_withdrawals')||'[]');
+  $("withdrawalsTable").innerHTML=list.slice().reverse().map(d=>`<tr><td>${dateFormat(d.date||d.createdAt)}</td><td>${d.name}</td><td>${d.method}</td><td>${d.phone}</td><td><strong>${money(d.amount)}</strong></td><td><span class="badge ${d.status==="approved"?"badge-green":d.status==="rejected"?"badge-red":"badge-orange"}">${d.status} PUBLIC</span></td><td>${d.status==="pending"?`<button class="btn btn-green" onclick="approveWithdrawal('${d.id||d._id}')">✓ Payer PUBLIC</button> <button class="btn btn-red" onclick="rejectWithdrawal('${d.id||d._id}')">✕ Refuser</button>`:`<button class="btn" onclick="approveWithdrawal('${d.id||d._id}')">✓ Re-payer</button>`}</td></tr>`).join("")||'<tr><td colspan="7" class="empty">Aucune PUBLIC</td></tr>';
+}
+window.approveWithdrawal=async(id)=>{
+  if(!confirm("Payer PUBLIC FC ?")) return;
+  const r=await fetch(`${API_BASE}/admin/approve-withdrawal`,{method:"POST",headers:{"Content-Type":"application/json",Authorization:`Bearer ${getToken()}`},body:JSON.stringify({id})});
+  if(r.ok){toast("✅ Retrait PUBLIC payé FC"); loadWithdrawals(); loadDashboard();}
+}
+window.rejectWithdrawal=async(id)=>{
+  await fetch(`${API_BASE}/admin/reject-withdrawal`,{method:"POST",headers:{"Content-Type":"application/json",Authorization:`Bearer ${getToken()}`},body:JSON.stringify({id})});
+  loadWithdrawals(); loadDashboard();
+}
+window.loadPaymentMethods=function(){const list=JSON.parse(localStorage.getItem('jason_payments')||'[]'); $("paymentMethodsList").innerHTML=list.map((p,i)=>`<div style="padding:10px 0;border-bottom:1px solid #1a2a40;display:flex;justify-content:space-between;"><div><strong>${p.name} FC PUBLIC</strong> <span style="color:#91a0b5;font-size:11px;">${p.number}</span></div><button class="btn btn-red" onclick="removePayment(${i})">✕</button></div>`).join("")||'<div class="empty">Aucun moyen FC PUBLIC</div>';}
+window.addPaymentMethod=function(){const name=$("paymentName").value.trim(); const num=$("paymentNumber").value.trim(); if(!name||!num){toast("Remplis FC");return;} const list=JSON.parse(localStorage.getItem('jason_payments')||'[]'); list.push({name,number:num,type:$("paymentType").value}); localStorage.setItem('jason_payments',JSON.stringify(list)); $("paymentName").value=""; $("paymentNumber").value=""; loadPaymentMethods(); toast("Ajouté PUBLIC FC");}
+window.removePayment=function(i){let list=JSON.parse(localStorage.getItem('jason_payments')||'[]'); list.splice(i,1); localStorage.setItem('jason_payments',JSON.stringify(list)); loadPaymentMethods();}
+window.loadInvestmentPlans=function(){const plans=JSON.parse(localStorage.getItem('jason_plans')||'[{"name":"Plan Débutant FC","min":20000,"gain":1500,"duree":30},{"name":"Plan Pro FC","min":100000,"gain":8000,"duree":30}]'); $("plansContainer").innerHTML=plans.map((p,i)=>`<div class="plan-card" style="margin-bottom:12px;"><h3>${p.name} FC PUBLIC</h3><div class="plan-fields"><div class="field"><label>Nom FC</label><input id="planName${i}" value="${p.name}"></div><div class="field"><label>Min FC</label><input id="planMin${i}" type="number" value="${p.min}"></div><div class="field"><label>Gain/j FC</label><input id="planGain${i}" type="number" value="${p.gain}"></div><div class="field"><label>Durée j</label><input id="planDuree${i}" type="number" value="${p.duree}"></div></div></div>`).join("");}
+window.addPlan=function(){let plans=JSON.parse(localStorage.getItem('jason_plans')||'[]'); plans.push({name:"Nouveau Plan FC PUBLIC",min:50000,gain:4000,duree:30}); localStorage.setItem('jason_plans',JSON.stringify(plans)); loadInvestmentPlans();}
+window.saveInvestmentPlans=function(){const plans=JSON.parse(localStorage.getItem('jason_plans')||'[]'); const np=plans.map((_,i)=>({name:document.getElementById('planName'+i).value,min:Number(document.getElementById('planMin'+i).value),gain:Number(document.getElementById('planGain'+i).value),duree:Number(document.getElementById('planDuree'+i).value)})); localStorage.setItem('jason_plans',JSON.stringify(np)); toast("Plans PUBLIC enregistrés FC");}
+window.loadTasks=function(){ const list=JSON.parse(localStorage.getItem('jason_tasks')||'[]'); $("badgeTask").textContent=list.length; $("tasksList").innerHTML=list.map((t,i)=>`<div class="task-card"><strong>${t.title} FC PUBLIC</strong><p style="color:#91a0b5;font-size:12px;margin-top:6px;">${t.description||''}</p><div style="margin-top:8px;"><span class="badge badge-blue">${t.duration||5} min</span><span class="badge badge-green">${money(t.reward||0)}</span></div><br><button class="btn btn-red" onclick="removeTask(${i})">Supprimer PUBLIC</button></div>`).join("")||'<div class="empty">Aucune tâche PUBLIC FC</div>';}
+window.createTask=function(){ const title=$("taskTitle").value.trim(); if(!title){toast("Nom requis PUBLIC");return;} const list=JSON.parse(localStorage.getItem('jason_tasks')||'[]'); list.push({id:Date.now(),title,description:$("taskDescription").value,duration:Number($("taskDuration").value||5),reward:Number($("taskReward").value||1500),minInvestment:Number($("taskMinInvestment").value||20000),status:$("taskStatus").value}); localStorage.setItem('jason_tasks',JSON.stringify(list)); $("taskTitle").value=""; $("taskDescription").value=""; loadTasks(); toast("Tâche PUBLIC créée FC");}
+window.removeTask=function(i){let list=JSON.parse(localStorage.getItem('jason_tasks')||'[]'); list.splice(i,1); localStorage.setItem('jason_tasks',JSON.stringify(list)); loadTasks();}
+window.publishActivity=function(){const title=$("activityTitle").value.trim(); if(!title){toast("Titre PUBLIC requis");return;} const list=JSON.parse(localStorage.getItem('jason_activities')||'[]'); list.push({title,description:$("activityDescription").value,category:$("activityCategory").value,date:new Date().toISOString()}); localStorage.setItem('jason_activities',JSON.stringify(list)); loadActivities(); toast("Publié PUBLIC FC");}
+window.loadActivities=function(){const list=JSON.parse(localStorage.getItem('jason_activities')||'[]'); $("activitiesList").innerHTML=list.map((a,i)=>`<div class="task-card"><strong>${a.title} FC PUBLIC</strong><span class="badge badge-blue" style="margin-left:8px;">${a.category||''}</span><p style="color:#91a0b5;font-size:12px;margin-top:6px;">${a.description||''}</p><br><button class="btn btn-red" onclick="removeActivity(${i})">Supprimer PUBLIC</button></div>`).join("")||'<div class="empty">Aucune activité PUBLIC</div>';}
+window.removeActivity=function(i){let list=JSON.parse(localStorage.getItem('jason_activities')||'[]'); list.splice(i,1); localStorage.setItem('jason_activities',JSON.stringify(list)); loadActivities();}
+window.sendNotification=function(){const title=$("notificationTitle").value.trim(); const msg=$("notificationMessage").value.trim(); if(!title||!msg){toast("Remplis PUBLIC");return;} const list=JSON.parse(localStorage.getItem('jason_notifications')||'[]'); list.push({title,message:msg,date:new Date().toISOString()}); localStorage.setItem('jason_notifications',JSON.stringify(list)); $("notificationTitle").value=""; $("notificationMessage").value=""; loadNotifications(); toast("Envoyé PUBLIC FC");}
+window.loadNotifications=function(){const list=JSON.parse(localStorage.getItem('jason_notifications')||'[]'); $("notificationsList").innerHTML=list.map(n=>`<div class="task-card"><strong>${n.title} FC PUBLIC</strong><p style="color:#91a0b5;font-size:12px;margin-top:6px;">${n.message}</p></div>`).join("")||'<div class="empty">Aucune PUBLIC</div>';}
+window.saveReferralSettings=function(){localStorage.setItem('jason_referral',JSON.stringify({bonus:$("referralBonus").value,prefix:$("referralPrefix").value})); toast("Enregistré PUBLIC FC");}
+window.saveSettings=function(){toast("Enregistré PUBLIC FC");}
+
+if(localStorage.getItem('jason_admin')==='1'){$("adminLogin").classList.add("hidden");$("adminApp").classList.remove("hidden");}
+loadDashboard();
+document.addEventListener('click',(e)=>{if(!e.target.closest('.quick-menu-wrap')){document.getElementById('quickMenu').classList.remove('show');}});
+</script>
+</body>
+</html>
